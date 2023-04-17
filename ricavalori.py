@@ -49,7 +49,7 @@ with open('music.mid', 'wb') as output_file:
 # Tocando a música
 from pygame import mixer
 mixer.init()
-mixer.music.load('music.mid')
+mixer.music.load('ricavalori.mid')
 mixer.music.play()
 
 # Esperando o fim da música
