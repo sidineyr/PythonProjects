@@ -2,17 +2,17 @@ from midiutil.MidiFile import MIDIFile
 import random
 
 # Definindo as configurações das notas musicais
-first_30s_notes = 50
-first_30s_note_duration = 80  # em milissegundos
-first_30s_silence_duration = 30  # em milissegundos
+first_30s_notes = 160
+first_30s_note_duration = 180  # em milissegundos
+first_30s_silence_duration = 90  # em milissegundos
 
-next_30s_notes = 100
+next_30s_notes = 110
 next_30s_note_duration = 100  # em milissegundos
 next_30s_silence_duration = 20  # em milissegundos
 
 final_10s_notes = 40
-final_10s_note_duration = 160  # em milissegundos
-final_10s_silence_duration = 20  # em milissegundos
+final_10s_note_duration = 130  # em milissegundos
+final_10s_silence_duration = 10  # em milissegundos
 
 # Função para gerar uma nota musical aleatória
 def generate_random_note():
