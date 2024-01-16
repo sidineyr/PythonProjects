@@ -74,3 +74,197 @@ SQL, ou Structured Query Language, é uma linguagem projetada para gerenciar e m
 
 **Conclusão: Poder nas Mãos do Desenvolvedor de Dados**
 SQL é mais do que uma linguagem; é uma ferramenta poderosa para interagir com dados de maneira eficiente e segura. Ao compreender os conceitos fundamentais e praticar com exemplos do mundo real, qualquer desenvolvedor de dados pode explorar todo o potencial dessa linguagem universal de bancos de dados.
+
+
+**Comandos SQL e Suas Funções Principais**
+
+SQL (Structured Query Language) é uma linguagem de consulta utilizada para gerenciar e manipular dados em sistemas de gerenciamento de banco de dados relacionais. Aqui está uma lista de alguns dos comandos SQL mais essenciais e suas funções:
+
+**1. CREATE:**
+   - **Função:** Cria objetos no banco de dados, como tabelas, índices, ou visões.
+   - **Exemplo:**
+     ```sql
+     CREATE TABLE alunos (id INT, nome VARCHAR(50), idade INT);
+     ```
+
+**2. INSERT:**
+   - **Função:** Adiciona novos registros a uma tabela.
+   - **Exemplo:**
+     ```sql
+     INSERT INTO alunos (id, nome, idade) VALUES (1, 'João', 25);
+     ```
+
+**3. SELECT:**
+   - **Função:** Recupera dados de uma ou mais tabelas.
+   - **Exemplo:**
+     ```sql
+     SELECT nome, idade FROM alunos WHERE idade > 18;
+     ```
+
+**4. UPDATE:**
+   - **Função:** Modifica dados existentes em uma tabela.
+   - **Exemplo:**
+     ```sql
+     UPDATE alunos SET idade = 26 WHERE nome = 'João';
+     ```
+
+**5. DELETE:**
+   - **Função:** Remove registros de uma tabela.
+   - **Exemplo:**
+     ```sql
+     DELETE FROM alunos WHERE idade < 18;
+     ```
+
+**6. ALTER:**
+   - **Função:** Modifica a estrutura de uma tabela existente.
+   - **Exemplo:**
+     ```sql
+     ALTER TABLE alunos ADD COLUMN email VARCHAR(100);
+     ```
+
+**7. JOIN:**
+   - **Função:** Combina dados de duas ou mais tabelas com base em uma condição.
+   - **Exemplo:**
+     ```sql
+     SELECT alunos.nome, cursos.nome_curso FROM matriculas INNER JOIN alunos ON matriculas.aluno_id = alunos.id INNER JOIN cursos ON matriculas.curso_id = cursos.id;
+     ```
+
+**8. GROUP BY:**
+   - **Função:** Agrupa resultados com base em uma ou mais colunas.
+   - **Exemplo:**
+     ```sql
+     SELECT curso_id, COUNT(*) FROM matriculas GROUP BY curso_id;
+     ```
+
+**9. ORDER BY:**
+   - **Função:** Ordena os resultados com base em uma ou mais colunas.
+   - **Exemplo:**
+     ```sql
+     SELECT nome FROM alunos ORDER BY idade DESC;
+     ```
+
+**10. WHERE:**
+   - **Função:** Filtra resultados com base em condições específicas.
+   - **Exemplo:**
+     ```sql
+     SELECT nome FROM alunos WHERE idade > 18;
+     ```
+
+**11. DISTINCT:**
+   - **Função:** Retorna valores distintos em uma coluna.
+   - **Exemplo:**
+     ```sql
+     SELECT DISTINCT idade FROM alunos;
+     ```
+
+**12. COUNT, SUM, AVG, MAX, MIN:**
+   - **Função:** Realizam cálculos em conjuntos de dados.
+   - **Exemplo:**
+     ```sql
+     SELECT AVG(idade) FROM alunos;
+     ```
+
+**13. GRANT e REVOKE:**
+   - **Função:** Concede ou revoga privilégios de acesso ao banco de dados.
+   - **Exemplo:**
+     ```sql
+     GRANT SELECT ON alunos TO usuario;
+     REVOKE INSERT, UPDATE ON alunos FROM usuario;
+     ```
+
+Esses comandos formam a base para interações com bancos de dados relacionais. Com uma compreensão desses comandos, os desenvolvedores podem realizar operações complexas para manipular, recuperar e gerenciar dados de maneira eficiente.
+
+
+Aqui está uma lista de comandos SQL sem exemplos de aplicação:
+
+1. **SELECT:**
+   - Recupera dados de uma ou mais tabelas.
+
+2. **FROM:**
+   - Especifica a tabela da qual os dados serão recuperados.
+
+3. **WHERE:**
+   - Filtra os resultados com base em condições específicas.
+
+4. **ORDER BY:**
+   - Ordena os resultados com base em uma ou mais colunas.
+
+5. **GROUP BY:**
+   - Agrupa resultados com base em uma ou mais colunas.
+
+6. **HAVING:**
+   - Filtra resultados de grupos no resultado de uma consulta GROUP BY.
+
+7. **JOIN:**
+   - Combina dados de duas ou mais tabelas com base em uma condição.
+
+8. **INNER JOIN:**
+   - Retorna registros que têm valores correspondentes em ambas as tabelas.
+
+9. **LEFT JOIN (ou LEFT OUTER JOIN):**
+   - Retorna todos os registros da tabela à esquerda e os registros correspondentes da tabela à direita.
+
+10. **RIGHT JOIN (ou RIGHT OUTER JOIN):**
+    - Retorna todos os registros da tabela à direita e os registros correspondentes da tabela à esquerda.
+
+11. **FULL JOIN (ou FULL OUTER JOIN):**
+    - Retorna registros quando há uma correspondência em uma das tabelas.
+
+12. **UNION:**
+    - Combina resultados de duas ou mais consultas.
+
+13. **INSERT INTO:**
+    - Adiciona novos registros a uma tabela.
+
+14. **VALUES:**
+    - Especifica os valores a serem inseridos em uma consulta INSERT.
+
+15. **UPDATE:**
+    - Modifica dados existentes em uma tabela.
+
+16. **DELETE FROM:**
+    - Remove registros de uma tabela.
+
+17. **CREATE DATABASE:**
+    - Cria um novo banco de dados.
+
+18. **CREATE TABLE:**
+    - Cria uma nova tabela.
+
+19. **ALTER TABLE:**
+    - Modifica a estrutura de uma tabela existente.
+
+20. **DROP TABLE:**
+    - Exclui uma tabela.
+
+21. **ALTER DATABASE:**
+    - Modifica as propriedades de um banco de dados.
+
+22. **DROP DATABASE:**
+    - Exclui um banco de dados.
+
+23. **CREATE INDEX:**
+    - Cria um índice em uma tabela.
+
+24. **DROP INDEX:**
+    - Exclui um índice de uma tabela.
+
+25. **GRANT:**
+    - Concede privilégios de acesso a usuários.
+
+26. **REVOKE:**
+    - Revoga privilégios de acesso de usuários.
+
+27. **COMMIT:**
+    - Salva as alterações feitas em uma transação.
+
+28. **ROLLBACK:**
+    - Desfaz as alterações feitas em uma transação.
+
+29. **SAVEPOINT:**
+    - Define um ponto dentro de uma transação para o qual você pode mais tarde fazer rollback.
+
+30. **ROLLBACK TO SAVEPOINT:**
+    - Desfaz alterações feitas até um determinado ponto dentro de uma transação.
+
+Esses comandos SQL formam a base para interações com bancos de dados relacionais e são essenciais para a manipulação eficiente de dados.
