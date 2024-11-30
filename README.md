@@ -135,7 +135,7 @@ Utilizando o **Magenta**, o modelo gera uma melodia com base em dados de treinam
 
 1. Clone o repositório:  
 ```bash
-git clone https://github.com/seu-usuario/python-composicao-musical.git
+git clone [https://github.com/sidineyr/PythonProjects/.git](https://github.com/sidineyr/PythonProjects)
 ```  
 
 2. Instale as dependências:  
