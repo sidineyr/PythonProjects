@@ -7,11 +7,13 @@ on:
     paths-ignore:
       - 'SimpleDjIA/**'
       - '.github/workflows/simple-djia.yml'
+      - '.github/workflows/python-app.yml'
   pull_request:
     branches: [ "master" ]
     paths-ignore:
       - 'SimpleDjIA/**'
       - '.github/workflows/simple-djia.yml'
+      - '.github/workflows/python-app.yml'
 
 permissions:
   contents: read
