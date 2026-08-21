@@ -5,6 +5,8 @@ import argparse
 from music_composer.composer import compose_melody
 from music_composer.midi import write_midi
 
+TIME_SIGNATURES = {"4/4": 4, "3/4": 3, "2/4": 2}
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Generate a scale-aware MIDI melody.")
@@ -12,7 +14,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--scale", choices=("major", "minor"), default="major")
     parser.add_argument("--octave", type=int, default=4)
     parser.add_argument("--bars", type=int, default=4)
-    parser.add_argument("--beats", type=int, default=4, help="Beats per bar")
+    parser.add_argument("--time-signature", choices=tuple(TIME_SIGNATURES), default="4/4")
     parser.add_argument("--tempo", type=int, default=120)
     parser.add_argument("--instrument", type=int, default=0, help="General MIDI program 0-127")
     parser.add_argument("--randomness", type=float, default=0.5)
@@ -28,7 +30,7 @@ def main() -> None:
         scale=args.scale,
         octave=args.octave,
         bars=args.bars,
-        beats_per_bar=args.beats,
+        beats_per_bar=TIME_SIGNATURES[args.time_signature],
         randomness=args.randomness,
         seed=args.seed,
     )
