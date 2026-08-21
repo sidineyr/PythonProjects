@@ -10,45 +10,32 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 
 from .composer import compose_melody
+from .harmony import PROGRESSIONS, build_accompaniment
 from .midi import write_midi
 
 ROOT_NOTES = ("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")
 SCALES = {"Maior": "major", "Menor natural": "minor"}
 TIME_SIGNATURES = {"4/4": 4, "3/4": 3, "2/4": 2}
 INSTRUMENTS = {
-    "Piano": 0,
-    "Piano elétrico": 4,
-    "Violão": 24,
-    "Guitarra limpa": 27,
-    "Baixo acústico": 32,
-    "Violino": 40,
-    "Violoncelo": 42,
-    "Cordas": 48,
-    "Trompete": 56,
-    "Sax alto": 65,
-    "Flauta": 73,
-    "Sintetizador": 80,
+    "Piano": 0, "Piano elétrico": 4, "Violão": 24, "Guitarra limpa": 27,
+    "Baixo acústico": 32, "Violino": 40, "Violoncelo": 42, "Cordas": 48,
+    "Trompete": 56, "Sax alto": 65, "Flauta": 73, "Sintetizador": 80,
 }
 
 
 class MusicComposerApp(ttk.Frame):
-    """Desktop UI backed by the scale-aware composition engine."""
-
     def __init__(self, master: tk.Tk) -> None:
         super().__init__(master, padding=18)
         self.master = master
         self.last_output: Path | None = None
-        self._configure_window()
-        self._build_variables()
-        self._build_layout()
-
-    def _configure_window(self) -> None:
         self.master.title("Python Music Composer")
-        self.master.minsize(620, 540)
+        self.master.minsize(650, 650)
         self.master.columnconfigure(0, weight=1)
         self.master.rowconfigure(0, weight=1)
         self.grid(sticky="nsew")
         self.columnconfigure(1, weight=1)
+        self._build_variables()
+        self._build_layout()
 
     def _build_variables(self) -> None:
         self.root_note = tk.StringVar(value="C")
@@ -58,78 +45,58 @@ class MusicComposerApp(ttk.Frame):
         self.time_signature = tk.StringVar(value="4/4")
         self.tempo = tk.IntVar(value=100)
         self.instrument = tk.StringVar(value="Piano")
-        self.randomness = tk.IntVar(value=55)
+        self.progression = tk.StringVar(value="I-V-vi-IV")
+        self.harmony_enabled = tk.BooleanVar(value=True)
+        self.randomness = tk.IntVar(value=45)
         self.seed = tk.StringVar(value="")
         self.output = tk.StringVar(value="composition.mid")
         self.status = tk.StringVar(value="Pronto para compor.")
 
     def _build_layout(self) -> None:
-        title = ttk.Label(self, text="Python Music Composer", font=("TkDefaultFont", 18, "bold"))
-        title.grid(row=0, column=0, columnspan=3, sticky="w", pady=(0, 4))
-        ttk.Label(
-            self,
-            text="Crie melodias MIDI coerentes com tonalidade, escala, andamento e instrumento.",
-        ).grid(row=1, column=0, columnspan=3, sticky="w", pady=(0, 18))
+        ttk.Label(self, text="Python Music Composer", font=("TkDefaultFont", 18, "bold")).grid(row=0, column=0, columnspan=3, sticky="w")
+        ttk.Label(self, text="Melodia, harmonia e baixo construídos a partir da teoria musical.").grid(row=1, column=0, columnspan=3, sticky="w", pady=(4, 16))
+        self._combo(2, "Tonalidade", self.root_note, ROOT_NOTES)
+        self._combo(3, "Escala", self.scale_name, tuple(SCALES))
+        self._spin(4, "Oitava da melodia", self.octave, 1, 7)
+        self._spin(5, "Compassos", self.bars, 1, 64)
+        self._combo(6, "Compasso", self.time_signature, tuple(TIME_SIGNATURES))
+        self._spin(7, "BPM", self.tempo, 40, 240)
+        self._combo(8, "Instrumento melódico", self.instrument, tuple(INSTRUMENTS))
+        self._combo(9, "Progressão harmônica", self.progression, tuple(PROGRESSIONS))
+        ttk.Checkbutton(self, text="Adicionar acordes e linha de baixo", variable=self.harmony_enabled).grid(row=10, column=0, columnspan=3, sticky="w", pady=6)
 
-        self._combo_row(2, "Tonalidade", self.root_note, ROOT_NOTES)
-        self._combo_row(3, "Escala", self.scale_name, tuple(SCALES))
-        self._spin_row(4, "Oitava", self.octave, 1, 7)
-        self._spin_row(5, "Compassos", self.bars, 1, 64)
-        self._combo_row(6, "Compasso", self.time_signature, tuple(TIME_SIGNATURES))
-        self._spin_row(7, "BPM", self.tempo, 40, 240)
-        self._combo_row(8, "Instrumento", self.instrument, tuple(INSTRUMENTS))
-
-        ttk.Label(self, text="Aleatoriedade").grid(row=9, column=0, sticky="w", pady=6)
-        randomness = ttk.Scale(
-            self,
-            from_=0,
-            to=100,
-            variable=self.randomness,
-            command=self._update_randomness_label,
-        )
-        randomness.grid(row=9, column=1, sticky="ew", padx=(10, 8), pady=6)
-        self.randomness_label = ttk.Label(self, text="55%", width=5)
-        self.randomness_label.grid(row=9, column=2, sticky="w")
-
-        ttk.Label(self, text="Seed (opcional)").grid(row=10, column=0, sticky="w", pady=6)
-        ttk.Entry(self, textvariable=self.seed).grid(row=10, column=1, columnspan=2, sticky="ew", padx=(10, 0), pady=6)
-
-        ttk.Label(self, text="Arquivo MIDI").grid(row=11, column=0, sticky="w", pady=6)
-        ttk.Entry(self, textvariable=self.output).grid(row=11, column=1, sticky="ew", padx=(10, 8), pady=6)
-        ttk.Button(self, text="Escolher...", command=self.choose_output).grid(row=11, column=2, sticky="ew", pady=6)
+        ttk.Label(self, text="Aleatoriedade").grid(row=11, column=0, sticky="w", pady=6)
+        ttk.Scale(self, from_=0, to=100, variable=self.randomness, command=self._update_randomness).grid(row=11, column=1, sticky="ew", padx=(10, 8))
+        self.randomness_label = ttk.Label(self, text="45%", width=5)
+        self.randomness_label.grid(row=11, column=2, sticky="w")
+        ttk.Label(self, text="Seed (opcional)").grid(row=12, column=0, sticky="w", pady=6)
+        ttk.Entry(self, textvariable=self.seed).grid(row=12, column=1, columnspan=2, sticky="ew", padx=(10, 0))
+        ttk.Label(self, text="Arquivo MIDI").grid(row=13, column=0, sticky="w", pady=6)
+        ttk.Entry(self, textvariable=self.output).grid(row=13, column=1, sticky="ew", padx=(10, 8))
+        ttk.Button(self, text="Escolher...", command=self.choose_output).grid(row=13, column=2, sticky="ew")
 
         controls = ttk.Frame(self)
-        controls.grid(row=12, column=0, columnspan=3, sticky="ew", pady=(20, 10))
-        controls.columnconfigure(0, weight=1)
-        controls.columnconfigure(1, weight=1)
+        controls.grid(row=14, column=0, columnspan=3, sticky="ew", pady=(20, 10))
+        controls.columnconfigure((0, 1), weight=1)
         ttk.Button(controls, text="Gerar música", command=self.generate).grid(row=0, column=0, sticky="ew", padx=(0, 6))
         self.open_button = ttk.Button(controls, text="Abrir MIDI", command=self.open_last_output, state="disabled")
         self.open_button.grid(row=0, column=1, sticky="ew", padx=(6, 0))
+        ttk.Separator(self).grid(row=15, column=0, columnspan=3, sticky="ew", pady=(4, 10))
+        ttk.Label(self, textvariable=self.status).grid(row=16, column=0, columnspan=3, sticky="w")
 
-        ttk.Separator(self).grid(row=13, column=0, columnspan=3, sticky="ew", pady=(4, 10))
-        ttk.Label(self, textvariable=self.status).grid(row=14, column=0, columnspan=3, sticky="w")
-
-    def _combo_row(self, row: int, label: str, variable: tk.Variable, values: tuple[str, ...]) -> None:
+    def _combo(self, row, label, variable, values) -> None:
         ttk.Label(self, text=label).grid(row=row, column=0, sticky="w", pady=6)
-        combo = ttk.Combobox(self, textvariable=variable, values=values, state="readonly")
-        combo.grid(row=row, column=1, columnspan=2, sticky="ew", padx=(10, 0), pady=6)
+        ttk.Combobox(self, textvariable=variable, values=values, state="readonly").grid(row=row, column=1, columnspan=2, sticky="ew", padx=(10, 0))
 
-    def _spin_row(self, row: int, label: str, variable: tk.Variable, minimum: int, maximum: int) -> None:
+    def _spin(self, row, label, variable, minimum, maximum) -> None:
         ttk.Label(self, text=label).grid(row=row, column=0, sticky="w", pady=6)
-        ttk.Spinbox(self, textvariable=variable, from_=minimum, to=maximum).grid(
-            row=row, column=1, columnspan=2, sticky="ew", padx=(10, 0), pady=6
-        )
+        ttk.Spinbox(self, textvariable=variable, from_=minimum, to=maximum).grid(row=row, column=1, columnspan=2, sticky="ew", padx=(10, 0))
 
-    def _update_randomness_label(self, _value: str) -> None:
+    def _update_randomness(self, _value: str) -> None:
         self.randomness_label.configure(text=f"{self.randomness.get()}%")
 
     def choose_output(self) -> None:
-        filename = filedialog.asksaveasfilename(
-            title="Salvar composição MIDI",
-            defaultextension=".mid",
-            filetypes=(("MIDI", "*.mid"), ("Todos os arquivos", "*.*")),
-            initialfile=Path(self.output.get()).name or "composition.mid",
-        )
+        filename = filedialog.asksaveasfilename(title="Salvar composição MIDI", defaultextension=".mid", filetypes=(("MIDI", "*.mid"), ("Todos", "*.*")))
         if filename:
             self.output.set(filename)
 
@@ -144,39 +111,32 @@ class MusicComposerApp(ttk.Frame):
 
     def generate(self) -> None:
         try:
+            beats = TIME_SIGNATURES[self.time_signature.get()]
+            progression = self.progression.get()
+            melody = compose_melody(
+                root=self.root_note.get(), scale=SCALES[self.scale_name.get()], octave=self.octave.get(),
+                bars=self.bars.get(), beats_per_bar=beats, randomness=self.randomness.get() / 100,
+                seed=self._seed_value(), progression=progression,
+            )
+            chords, bass = ([], [])
+            if self.harmony_enabled.get():
+                chords, bass = build_accompaniment(self.root_note.get(), SCALES[self.scale_name.get()], self.bars.get(), beats, progression)
             output = Path(self.output.get().strip() or "composition.mid")
             if output.suffix.lower() not in {".mid", ".midi"}:
                 output = output.with_suffix(".mid")
                 self.output.set(str(output))
-
-            melody = compose_melody(
-                root=self.root_note.get(),
-                scale=SCALES[self.scale_name.get()],
-                octave=self.octave.get(),
-                bars=self.bars.get(),
-                beats_per_bar=TIME_SIGNATURES[self.time_signature.get()],
-                randomness=self.randomness.get() / 100.0,
-                seed=self._seed_value(),
-            )
-            path = write_midi(
-                melody,
-                output,
-                tempo=self.tempo.get(),
-                instrument=INSTRUMENTS[self.instrument.get()],
-            )
+            path = write_midi(melody, output, self.tempo.get(), INSTRUMENTS[self.instrument.get()], chords, bass, beats)
         except (OSError, ValueError, KeyError, tk.TclError) as exc:
             messagebox.showerror("Não foi possível gerar a música", str(exc))
             self.status.set("Erro ao gerar composição.")
             return
-
         self.last_output = path.resolve()
         self.open_button.configure(state="normal")
-        self.status.set(f"Criado: {self.last_output} — {len(melody)} notas")
-        messagebox.showinfo("Composição concluída", f"Arquivo MIDI criado com sucesso:\n{self.last_output}")
+        self.status.set(f"Criado: {self.last_output} — {len(melody)} notas, {len(chords)} acordes")
+        messagebox.showinfo("Composição concluída", f"MIDI criado:\n{self.last_output}")
 
     def open_last_output(self) -> None:
         if not self.last_output or not self.last_output.exists():
-            messagebox.showwarning("Arquivo indisponível", "Gere uma composição primeiro.")
             return
         try:
             if sys.platform.startswith("win"):
