@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 from simple_djia.models import Track
 from simple_djia.profiles import get_scene
 from simple_djia.selector import build_playlist, score_track
@@ -33,3 +35,11 @@ def test_playlist_avoids_same_artist_when_alternative_exists():
     ]
     playlist = build_playlist(tracks, scene, 3)
     assert playlist[0].track.artist != playlist[1].track.artist
+
+
+@pytest.mark.parametrize("limit", [0, -1])
+def test_playlist_rejects_non_positive_limit(limit):
+    scene = get_scene("restaurant_piano")
+    tracks = [track("one", "A", 82, 0.3, 0.2, 0.9, 0.6, tags=("piano",))]
+    with pytest.raises(ValueError, match="at least 1"):
+        build_playlist(tracks, scene, limit)
