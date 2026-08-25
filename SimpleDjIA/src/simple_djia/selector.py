@@ -43,6 +43,9 @@ def _transition_cost(a: Track, b: Track) -> float:
 
 def build_playlist(tracks: list[Track], scene: SceneProfile, limit: int = 20) -> list[RankedTrack]:
     """Rank transparently, then sequence with artist diversity and gradual transitions."""
+    if limit < 1:
+        raise ValueError("limit must be at least 1")
+
     pool = [r for r in (score_track(t, scene) for t in tracks) if r.score > -900]
     pool.sort(key=lambda item: item.score, reverse=True)
     if not pool:
