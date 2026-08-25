@@ -114,8 +114,10 @@ class App(ttk.Frame):
     def _play_next(self) -> None:
         if self.session is None or not self.session.playlist:
             return
-        index = min(self.session.current_index + 1, len(self.session.playlist) - 1)
-        self._play_index(index)
+        if self.session.next() is None:
+            self.status.set("Fim da playlist.")
+            return
+        self._play_index(self.session.current_index)
 
     def _stop(self) -> None:
         if self.process is not None and self.process.poll() is None:
