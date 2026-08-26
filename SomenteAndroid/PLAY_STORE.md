@@ -2,30 +2,25 @@
 
 ## Nome
 
-SOMENTE — aprenda música ouvindo
+SOMENTE — ouvir, ler e criar música
 
 ## Descrição curta
 
-Treine ouvido, ritmo e notas em um percurso musical humano e gradual.
+Treino auditivo, pauta sincronizada e criação de exercícios musicais.
 
 ## Descrição completa
 
-SOMENTE une som e mente para ensinar música do jeito como ela começa: ouvindo. Você aprende a distinguir som e silêncio, comparar sons, reconhecer grave e agudo, perceber intensidade, acompanhar pulsos, imitar ritmos e então conhecer notas e melodias.
+SOMENTE une som e mente em três experiências simples para iniciantes de qualquer idade. Ouça uma nota e tente reconhecê-la; acompanhe pequenas sequências na pauta enquanto elas tocam; ou crie um exercício de até 16 notas para estudar e usar em aula.
 
-Cada atividade é breve, repetível e acolhe o erro como parte da aprendizagem. Não é necessário saber ler partitura nem possuir instrumento. Os sons são criados no próprio aparelho e o progresso fica salvo localmente.
-
-O projeto nasce de uma perspectiva pedagógica: conceito musical vem depois da experiência sonora. A publicidade, quando ativada, aparece somente em transições naturais após aulas concluídas, com limites rígidos para preservar atenção e aprendizagem.
+Não é necessário saber ler partitura nem possuir instrumento. O aplicativo funciona offline, sem conta e sem anúncios. O progresso e o exercício criado ficam somente no aparelho.
 
 ## Checklist antes de enviar
 
 - [ ] confirmar disponibilidade do nome e do pacote;
-- [ ] criar conta/registro no Play Console e verificar identidade;
 - [ ] gerar chave de upload e AAB assinado;
-- [ ] configurar consentimento e IDs AdMob de produção;
-- [ ] declarar corretamente público-alvo, anúncios e segurança de dados;
-- [ ] publicar política de privacidade em URL pública;
+- [ ] identificar o responsável e publicar a política de privacidade;
+- [ ] declarar corretamente público-alvo e segurança de dados;
 - [ ] criar ícone 512 × 512, feature graphic 1024 × 500 e capturas;
-- [ ] concluir classificação indicativa;
-- [ ] executar testes internos e fechados exigidos para a conta;
-- [ ] corrigir relatório de pré-lançamento;
-- [ ] enviar primeiro para produção gradual.
+- [ ] testar em telefone e tablet, com TalkBack e tamanhos de fonte maiores;
+- [ ] concluir classificação indicativa e teste fechado;
+- [ ] corrigir o relatório de pré-lançamento.

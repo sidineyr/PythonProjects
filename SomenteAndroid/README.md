@@ -1,37 +1,32 @@
 # SOMENTE Android
 
-**SOMENTE** (som + mente) é um aplicativo pedagógico para aprender música pela escuta, pela ação e pela criação. O primeiro percurso evita começar pela memorização abstrata: antes de apresentar nomes de notas, trabalha som, silêncio, comparação, altura, intensidade, pulso e ritmo.
+**SOMENTE** (som + mente) é um laboratório pedagógico gratuito para iniciantes de qualquer idade. A experiência reúne escuta, leitura e criação sem exigir conta, internet, anúncios, microfone ou conhecimento prévio de partitura.
 
-## Percurso v0.1
+## Três modos de aula
 
-1. som e silêncio;
-2. sons iguais e diferentes;
-3. grave e agudo;
-4. forte e fraco;
-5. pulso regular;
-6. imitação rítmica;
-7. primeira nota — Dó;
-8. direção melódica.
+1. **Escutar e reconhecer** — o estudante ouve uma nota, escolhe seu nome e vê a resposta na pauta.
+2. **Ler e ouvir** — uma sequência curta é reproduzida enquanto a nota atual é destacada.
+3. **Criar exercício** — professor ou estudante monta até 16 notas, ouve o resultado e salva a atividade localmente.
 
-O aplicativo sintetiza os sons no próprio aparelho e salva o progresso localmente. Não exige conta, microfone, localização ou acesso aos arquivos.
-
-## Publicidade com limite pedagógico
-
-O build público mantém anúncios desativados por padrão. Quando houver IDs de produção e consentimento configurados, a política permite intersticial apenas após uma aula concluída, nunca na primeira sessão, no máximo a cada quatro conclusões, com 12 minutos de intervalo e limite de três por dia. Áudio e exercício em andamento bloqueiam qualquer exibição.
-
-Durante desenvolvimento, use somente os IDs de teste já incluídos. Antes do lançamento, implemente o fluxo de consentimento UMP, defina corretamente a faixa etária e substitua os IDs por configuração privada de release. Para público infantil ou misto, use exclusivamente anúncios não personalizados e SDKs certificados para famílias.
+O desenho se inspira na clareza de aplicativos de partitura para Android, mas segue uma progressão própria: ouvir → reconhecer → visualizar → criar. Os exemplos são originais e não incluem repertório protegido.
 
 ## Executar
 
-Abra `SomenteAndroid` no Android Studio, aguarde a sincronização e execute `app` em Android 8.0 ou superior.
+Abra a pasta `SomenteAndroid` no Android Studio, aguarde a sincronização do Gradle e execute o módulo `app` em Android 8.0 ou superior. Na linha de comando, com Gradle 8.14.3 instalado:
 
 ```bash
-./gradlew test
-./gradlew bundleRelease
+gradle testDebugUnitTest lintDebug assembleDebug
 ```
 
-O pacote planejado é `br.com.sidineyr.somente`, alvo Android 16/API 36 e versão inicial `0.1.0`.
+O pacote é `br.com.sidineyr.somente`, com alvo Android 16/API 36 e versão `0.1.0`.
+
+## Uso responsável
+
+- use volume confortável, especialmente com fones;
+- o nome das notas segue a nomenclatura em português;
+- o exercício salvo permanece apenas neste aparelho;
+- valide contraste, tamanhos de toque e TalkBack em aparelho real antes de publicar.
 
 ## Limites da v0.1
 
-Esta versão é um alicerce funcional, ainda não um curso completo. Antes da produção serão necessários: revisão por usuários, validação completa com TalkBack, consentimento, assinatura do AAB, ícone, capturas de tela, ficha de segurança de dados e teste fechado exigido pela conta Play Console.
+O MVP usa ondas senoidais e valores rítmicos iguais. Compassos, figuras rítmicas, claves adicionais, transposição e exportação ficam para versões posteriores. Antes da Google Play ainda são necessários ícone, capturas, AAB assinado e teste fechado.

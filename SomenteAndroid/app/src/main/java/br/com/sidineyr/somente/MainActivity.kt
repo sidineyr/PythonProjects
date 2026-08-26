@@ -6,7 +6,6 @@ import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -14,108 +13,143 @@ import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
     private val player = TonePlayer()
-    private lateinit var ads: AdController
     private lateinit var root: LinearLayout
-    private val prefs by lazy { getSharedPreferences("progress", MODE_PRIVATE) }
-    private var lessonIndex = 0
-    private var expected = ""
-    private var firstSession = true
+    private val prefs by lazy { getSharedPreferences("somente", MODE_PRIVATE) }
+    private var answerButtons = mutableListOf<Button>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ads = AdController(this)
-        firstSession = !prefs.getBoolean("has_finished_session", false)
-        lessonIndex = prefs.getInt("lesson", 0).coerceIn(0, Curriculum.lessons.lastIndex)
         root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_HORIZONTAL
-            setPadding(40, 52, 40, 40)
-            setBackgroundColor(Color.rgb(23, 21, 42))
+            setPadding(32, 44, 32, 44)
+            setBackgroundColor(Color.rgb(247, 246, 252))
         }
         setContentView(ScrollView(this).apply { addView(root) })
-        showLesson()
-        ads.preload()
+        showHome()
     }
 
-    private fun showLesson(message: String? = null) {
-        root.removeAllViews()
-        val lesson = Curriculum.lessons[lessonIndex]
-        root.addView(text("SOMENTE", 30, Color.rgb(247, 211, 91)))
-        root.addView(text("Som + mente: aprender música escutando", 15, Color.LTGRAY))
-        root.addView(ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
-            max = Curriculum.lessons.size
-            progress = lessonIndex + 1
-            layoutParams = LinearLayout.LayoutParams(-1, 18).also { it.setMargins(0, 36, 0, 36) }
-        })
-        root.addView(text("${lessonIndex + 1}. ${lesson.title}", 26, Color.WHITE))
-        root.addView(text(lesson.objective, 17, Color.LTGRAY).withMargins(0, 16, 0, 28))
-        root.addView(text(lesson.prompt, 20, Color.WHITE).withMargins(0, 8, 0, 28))
-        button("▶ Ouvir exemplo") { presentExercise(lesson) }
-        lesson.choices.forEach { choice -> button(choice) { answer(lesson, choice) } }
-        message?.let { root.addView(text(it, 17, Color.rgb(247, 211, 91)).withMargins(0, 24, 0, 0)) }
-        root.addView(text("Sem pressa. Você pode ouvir quantas vezes precisar.", 14, Color.GRAY).withMargins(0, 38, 0, 0))
+    @Suppress("DEPRECATION")
+    override fun onBackPressed() {
+        if (root.tag == "home") super.onBackPressed() else showHome()
     }
 
-    private fun presentExercise(lesson: Lesson) {
-        if (player.isPlaying()) return
-        val (notes, answer, volume) = when (lesson.kind) {
-            ExerciseKind.SOUND_OR_SILENCE -> if (Random.nextBoolean()) Triple(listOf(440.0), "Som", .42) else Triple(emptyList(), "Silêncio", .0)
-            ExerciseKind.SAME_OR_DIFFERENT -> if (Random.nextBoolean()) Triple(listOf(330.0, 330.0), "Iguais", .42) else Triple(listOf(330.0, 494.0), "Diferentes", .42)
-            ExerciseKind.HIGH_OR_LOW -> if (Random.nextBoolean()) Triple(listOf(220.0), "Grave", .45) else Triple(listOf(880.0), "Agudo", .40)
-            ExerciseKind.LOUD_OR_SOFT -> if (Random.nextBoolean()) Triple(listOf(440.0), "Forte", .72) else Triple(listOf(440.0), "Fraco", .18)
-            ExerciseKind.PULSE -> Triple(listOf(440.0, 440.0, 440.0, 440.0), "Marcar pulso", .42)
-            ExerciseKind.RHYTHM -> Triple(listOf(392.0, 392.0, 523.25), "Repetir ritmo", .42)
-            ExerciseKind.NOTE -> Triple(listOf(261.63), "Reconheci", .42)
-            ExerciseKind.MELODY -> if (Random.nextBoolean()) Triple(listOf(261.63, 329.63, 392.0), "Subiu", .42) else Triple(listOf(392.0, 329.63, 261.63), "Desceu", .42)
+    private fun showHome() {
+        page("home")
+        title("SOMENTE")
+        subtitle("Ouvir • ler • criar")
+        paragraph("Um laboratório musical simples para aprender no próprio ritmo ou usar com um professor.")
+        modeButton("👂  Escutar e reconhecer", "Treino auditivo com notas na pauta") { showEarTraining() }
+        modeButton("♫  Ler e ouvir", "Acompanhe cada nota enquanto ela toca") { showReader() }
+        modeButton("✎  Criar exercício", "Monte e salve uma sequência para sua aula") { showComposer() }
+        paragraph("Funciona sem conta, anúncios ou internet. Use fones apenas em volume confortável.", muted = true)
+    }
+
+    private fun showEarTraining(message: String? = null) {
+        page("ear")
+        backButton()
+        title("Escutar e reconhecer")
+        paragraph("Ouça primeiro. Depois escolha a nota. A pauta revela a resposta.")
+        val target = Music.notes[Random.nextInt(7)]
+        val staff = StaffView(this).apply { notes = emptyList() }
+        root.addView(staff)
+        val choices = Music.notes.take(7).shuffled().take(3).toMutableList()
+        if (target !in choices) choices[0] = target
+        answerButtons.clear()
+        button("▶ Ouvir nota") {
+            setAnswersEnabled(false)
+            player.play(listOf(target), onDone = { runOnUiThread { setAnswersEnabled(true) } })
         }
-        expected = answer
-        if (notes.isEmpty()) window.decorView.postDelayed({ expected = answer }, 650) else player.play(notes, volume)
-    }
-
-    private fun answer(lesson: Lesson, choice: String) {
-        if (expected.isBlank()) { showLesson("Primeiro ouça o exemplo."); return }
-        if (choice != expected && lesson.kind !in setOf(ExerciseKind.PULSE, ExerciseKind.RHYTHM, ExerciseKind.NOTE)) {
-            showLesson("Ainda não. Ouça novamente e compare — errar também treina o ouvido.")
-            return
+        choices.shuffled().forEach { candidate ->
+            answerButtons += button(candidate.name, enabled = false) {
+                staff.notes = listOf(target)
+                setAnswersEnabled(false)
+                if (candidate == target) {
+                    prefs.edit().putInt("correct", prefs.getInt("correct", 0) + 1).apply()
+                    showEarTraining("Muito bem: ${target.name}. Ouça a próxima.")
+                } else {
+                    setAnswersEnabled(true)
+                    toastText("Era ${target.name}. Compare e tente uma nova nota.")
+                }
+            }
         }
-        val completed = prefs.getInt("completed", 0) + 1
-        val next = (lessonIndex + 1).coerceAtMost(Curriculum.lessons.lastIndex)
-        prefs.edit().putInt("completed", completed).putInt("lesson", next).apply()
-        lessonIndex = next
-        expected = ""
-        val now = System.currentTimeMillis()
-        val today = java.time.LocalDate.now().toString()
-        val adsToday = if (prefs.getString("ad_day", "") == today) prefs.getInt("ads_today", 0) else 0
-        if (adsToday == 0) prefs.edit().putString("ad_day", today).putInt("ads_today", 0).apply()
-        val state = AdState(completed, adsToday, prefs.getLong("last_ad", 0), firstSession, player.isPlaying())
-        if (AdPolicy.canShowAfterLesson(state, now) && ads.showIfReady {
-                prefs.edit().putInt("ads_today", state.adsToday + 1).putLong("last_ad", now).apply()
-                showLesson("Muito bem! Vamos ao próximo passo.")
-            }) return
-        showLesson("Muito bem! Vamos ao próximo passo.")
+        message?.let(::success)
+        paragraph("Acertos nesta instalação: ${prefs.getInt("correct", 0)}", muted = true)
     }
 
-    override fun onStop() {
-        prefs.edit().putBoolean("has_finished_session", true).apply()
-        super.onStop()
+    private fun showReader() {
+        page("reader")
+        backButton()
+        title("Ler e ouvir")
+        paragraph("A nota dourada mostra onde a reprodução está. Toque de novo quantas vezes precisar.")
+        val custom = Music.decode(prefs.getString("teacher_sequence", "") ?: "")
+        val sequences = Music.examples + if (custom.isNotEmpty()) listOf(MusicSequence("Exercício do professor", custom)) else emptyList()
+        var selected = sequences.first()
+        val staff = StaffView(this).apply { notes = selected.notes }
+        root.addView(staff)
+        val heading = subtitle(selected.title)
+        sequences.forEach { sequence ->
+            button(sequence.title) {
+                if (!player.isPlaying()) { selected = sequence; heading.text = sequence.title; staff.notes = sequence.notes }
+            }
+        }
+        button("▶ Reproduzir com acompanhamento") {
+            if (player.isPlaying()) return@button
+            player.play(selected.notes,
+                onNote = { runOnUiThread { staff.activeIndex = it } },
+                onDone = { runOnUiThread { staff.activeIndex = -1 } })
+        }
     }
 
-    private fun button(label: String, action: () -> Unit) {
-        root.addView(Button(this).apply {
-            text = label
-            isAllCaps = false
-            textSize = 17f
-            setOnClickListener { action() }
-            layoutParams = LinearLayout.LayoutParams(-1, -2).also { it.setMargins(0, 8, 0, 8) }
-        })
+    private fun showComposer(message: String? = null) {
+        page("composer")
+        backButton()
+        title("Criar exercício")
+        paragraph("Professor ou estudante: toque nas notas para montar uma frase de até 16 sons.")
+        val sequence = Music.decode(prefs.getString("teacher_sequence", "") ?: "").toMutableList()
+        val staff = StaffView(this).apply { notes = sequence.toList() }
+        root.addView(staff)
+        val summary = subtitle(sequenceSummary(sequence))
+        Music.notes.forEach { note ->
+            button("+ ${note.name}") {
+                if (sequence.size < 16) { sequence += note; staff.notes = sequence.toList(); summary.text = sequenceSummary(sequence) }
+                else toastText("O limite é 16 notas para manter o exercício legível.")
+            }
+        }
+        button("▶ Ouvir minha sequência") {
+            if (sequence.isEmpty()) toastText("Adicione pelo menos uma nota.") else player.play(sequence)
+        }
+        button("↶ Desfazer última nota") {
+            if (sequence.isNotEmpty()) { sequence.removeAt(sequence.lastIndex); staff.notes = sequence.toList(); summary.text = sequenceSummary(sequence) }
+        }
+        button("Salvar para usar em aula") {
+            if (sequence.isEmpty()) toastText("Crie uma sequência antes de salvar.")
+            else { prefs.edit().putString("teacher_sequence", Music.encode(sequence)).apply(); showComposer("Exercício salvo no aparelho e disponível em “Ler e ouvir”.") }
+        }
+        message?.let(::success)
+    }
+
+    private fun sequenceSummary(notes: List<MusicNote>) = if (notes.isEmpty()) "Sua sequência está vazia" else notes.joinToString("  ") { it.name }
+    private fun setAnswersEnabled(enabled: Boolean) { answerButtons.forEach { it.isEnabled = enabled } }
+    private fun page(tag: String) { root.removeAllViews(); root.tag = tag; answerButtons.clear() }
+    private fun backButton() { button("‹ Início") { showHome() } }
+    private fun title(value: String) = text(value, 30, Color.rgb(43, 37, 74)).also { root.addView(it) }
+    private fun subtitle(value: String) = text(value, 19, Color.rgb(82, 70, 160)).also { root.addView(it) }
+    private fun paragraph(value: String, muted: Boolean = false) = text(value, 16, if (muted) Color.GRAY else Color.DKGRAY).also { it.setPadding(0, 18, 0, 18); root.addView(it) }
+    private fun success(value: String) = text(value, 17, Color.rgb(24, 120, 78)).also { it.setPadding(0, 18, 0, 8); root.addView(it) }
+    private fun toastText(value: String) { android.widget.Toast.makeText(this, value, android.widget.Toast.LENGTH_LONG).show() }
+    private fun modeButton(label: String, detail: String, action: () -> Unit) { button(label, action = action); paragraph(detail, muted = true) }
+
+    private fun button(label: String, enabled: Boolean = true, action: () -> Unit): Button = Button(this).apply {
+        text = label; isAllCaps = false; textSize = 17f; isEnabled = enabled
+        contentDescription = label
+        setOnClickListener { action() }
+        layoutParams = LinearLayout.LayoutParams(-1, -2).also { it.setMargins(0, 8, 0, 8) }
+        root.addView(this)
     }
 
     private fun text(value: String, size: Int, color: Int) = TextView(this).apply {
         text = value; textSize = size.toFloat(); setTextColor(color); gravity = Gravity.CENTER
         importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
-    }
-
-    private fun View.withMargins(l: Int, t: Int, r: Int, b: Int): View = apply {
-        layoutParams = LinearLayout.LayoutParams(-1, -2).also { it.setMargins(l, t, r, b) }
     }
 }

@@ -1,9 +1,9 @@
-# Política de Privacidade — SOMENTE (rascunho)
+# Política de Privacidade — SOMENTE v0.1
 
 Última atualização: 26 de agosto de 2026.
 
-O SOMENTE salva no próprio dispositivo apenas o progresso das aulas e os controles de frequência de publicidade. A versão básica não exige conta e não solicita microfone, câmera, contatos, localização ou arquivos pessoais.
+O SOMENTE v0.1 funciona sem conta e sem conexão com a internet. Não contém publicidade nem ferramentas de análise e não solicita acesso ao microfone, câmera, contatos, localização, identificador de anúncios ou arquivos pessoais.
 
-Se a publicidade for ativada em uma versão pública, o Google Mobile Ads poderá processar identificadores e dados técnicos conforme o consentimento, a idade declarada e as configurações do aparelho. O aplicativo deverá oferecer anúncios não personalizados quando exigido e respeitar a recusa do usuário. A política definitiva deverá identificar o responsável pelo tratamento, meio de contato, base legal, retenção, direitos do titular e links para os fornecedores utilizados.
+O aplicativo armazena no próprio aparelho apenas a contagem de respostas corretas e uma sequência musical criada pelo usuário. Esses dados não são enviados ao desenvolvedor e podem ser apagados ao limpar os dados do aplicativo ou desinstalá-lo.
 
-Este texto é um rascunho técnico e não deve ser publicado como política final sem preencher os dados do desenvolvedor e conferir as declarações da versão efetivamente distribuída.
+Antes de publicação pública, esta política deverá incluir a identificação e o contato do responsável pelo aplicativo e corresponder exatamente ao pacote distribuído.
