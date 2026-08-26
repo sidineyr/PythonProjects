@@ -1,0 +1,27 @@
+name: SOMENTE Android
+
+on:
+  push:
+    paths: ["SomenteAndroid/**", ".github/workflows/somente-android.yml"]
+  pull_request:
+    paths: ["SomenteAndroid/**", ".github/workflows/somente-android.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: SomenteAndroid
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.14.3"
+      - run: gradle testDebugUnitTest lintDebug assembleDebug --stacktrace
