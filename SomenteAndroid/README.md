@@ -30,3 +30,7 @@ O pacote é `br.com.sidineyr.somente`, com alvo Android 16/API 36 e versão `0.1
 ## Limites da v0.1
 
 O MVP usa ondas senoidais e valores rítmicos iguais. Compassos, figuras rítmicas, claves adicionais, transposição e exportação ficam para versões posteriores. Antes da Google Play ainda são necessários ícone, capturas, AAB assinado e teste fechado.
+
+## Próximo passo de revisão
+
+Use [`RELEASE_CHECKLIST.md`](RELEASE_CHECKLIST.md) para validar primeiro o PR em CI, telefone, tablet, TalkBack e fonte ampliada. Os itens de Play Console e identidade visual estão separados porque não bloqueiam a revisão do código e não devem ser tratados como autorização para publicar.
