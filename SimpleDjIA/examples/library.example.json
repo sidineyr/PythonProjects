@@ -1,0 +1,30 @@
+[
+  {
+    "path": "./music/restaurant-piano-01.ogg",
+    "title": "Mesa perto da janela",
+    "artist": "Example Artist",
+    "genre": "piano",
+    "bpm": 78,
+    "energy": 0.24,
+    "valence": 0.62,
+    "acousticness": 0.95,
+    "danceability": 0.18,
+    "vocal_presence": 0.0,
+    "familiarity": 0.45,
+    "tags": ["piano", "instrumental", "acoustic"]
+  },
+  {
+    "path": "./music/party-house-01.ogg",
+    "title": "Open Floor",
+    "artist": "Example DJ",
+    "genre": "house",
+    "bpm": 126,
+    "energy": 0.9,
+    "valence": 0.82,
+    "acousticness": 0.08,
+    "danceability": 0.94,
+    "vocal_presence": 0.32,
+    "familiarity": 0.65,
+    "tags": ["dance", "house", "electronic", "party"]
+  }
+]

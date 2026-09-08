@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "simple-djia"
+version = "0.1.0"
+description = "Open-source human-centered ambient DJ and pianist playlist engine."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "Sidiney Rodrigues"}]
+license = {text = "MIT"}
+keywords = ["music", "playlist", "linux", "dj", "piano", "wellbeing"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: POSIX :: Linux",
+  "License :: OSI Approved :: MIT License",
+]
+
+[project.scripts]
+simple-djia = "simple_djia.cli:main"
+simple-djia-gui = "simple_djia.gui:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
