@@ -1,5 +1,5 @@
-# Curated checks for the root music_composer project. Historical experiments
-# and standalone subprojects have their own validation paths.
+# Curated checks for the maintained root exercises. Historical experiments and
+# standalone subprojects have their own validation paths.
 name: Python application
 
 on:
@@ -8,6 +8,8 @@ on:
     paths:
       - "music_composer/**"
       - "tests/**"
+      - "calculador.py"
+      - "formatapendrivelinux.py"
       - "requirements.txt"
       - ".github/workflows/python-app.yml"
   pull_request:
@@ -15,6 +17,8 @@ on:
     paths:
       - "music_composer/**"
       - "tests/**"
+      - "calculador.py"
+      - "formatapendrivelinux.py"
       - "requirements.txt"
       - ".github/workflows/python-app.yml"
 
@@ -37,7 +41,9 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
           python -m pip install flake8
-      - name: Check curated source
-        run: flake8 music_composer tests --count --select=E9,F63,F7,F82 --show-source --statistics
-      - name: Run curated tests
+      - name: Check maintained source
+        run: >-
+          flake8 music_composer tests calculador.py formatapendrivelinux.py
+          --count --select=E9,F63,F7,F82 --show-source --statistics
+      - name: Run maintained tests
         run: python -m pytest -q tests

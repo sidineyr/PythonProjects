@@ -7,6 +7,15 @@ This initiative was dedicated to harnessing the power of Python programming and 
 
 ---
 
+## Segurança dos experimentos
+
+Este repositório preserva exercícios produzidos em diferentes momentos de aprendizagem. Dois utilitários que exigem cuidado receberam proteções explícitas:
+
+- `calculador.py` aceita somente números, parênteses e as quatro operações exibidas; não executa texto como código;
+- `formatapendrivelinux.py` mostra apenas partições removíveis, graváveis e desmontadas, revalida o dispositivo e exige duas confirmações antes de apagar dados.
+
+Formatar uma partição continua sendo uma ação irreversível. Leia o caminho e o tamanho do dispositivo, mantenha cópias dos arquivos importantes e nunca confirme uma unidade que você não identificou fisicamente.
+
 ## Project Highlights  
 
 1. **Automation of Musical Structures**:  
