@@ -1,6 +1,12 @@
 # README.md  
 # Python for Musical Composition with AI  
 
+## Nova miniatura: Saída da Caverna
+
+O exemplo [`saida_da_caverna`](saida_da_caverna/) transforma um motivo inseguro
+em uma chegada luminosa ao longo de oito compassos. Inclui o código em
+`music21`, o arquivo MIDI e a renderização em WAV feita com FluidSynth.
+
 We are thrilled to announce the conclusion of our **Python for Musical Composition with AI** project! 🎶  
 
 This initiative was dedicated to harnessing the power of Python programming and artificial intelligence to enhance the creation of free, original music. By leveraging Python libraries, custom scripts, and machine learning models, the project aimed to make music composition more dynamic, creative, and accessible for all.  
