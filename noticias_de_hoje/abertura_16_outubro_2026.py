@@ -72,3 +72,5 @@ score.insert(0, harmony)
 score.insert(0, melody)
 score.write("midi", fp=OUTFILE)
 print(f"MIDI criado: {OUTFILE}")
+
+# A versão MIDI acompanha esta composição no repositório.
