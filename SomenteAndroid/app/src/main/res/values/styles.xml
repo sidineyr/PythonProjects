@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Somente" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:colorAccent">#6C5CE7</item>
+        <item name="android:navigationBarColor">#17152A</item>
+        <item name="android:statusBarColor">#17152A</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>
