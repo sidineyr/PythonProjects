@@ -23,6 +23,20 @@ uma harmonia grave e discreta, sem efeitos de áudio.
 - `saida_da_caverna.wav`: piano renderizado com FluidSynth e FluidR3 GM;
 - `renderizar.sh`: regeneração do MIDI e do WAV no Linux.
 
+## Três finais para escolher pelo ouvido
+
+Os seis primeiros compassos permanecem idênticos. Somente a conclusão muda:
+
+| Versão | Harmonia final | Última nota | Sensação proposta |
+|---|---|---|---|
+| `final_luminoso` | `F–G–C` | `C5` | chegada clara |
+| `final_suspenso` | `F–G–Am` | `A4` | caminho ainda aberto |
+| `final_sereno` | `Dm–G–C` | `E5` | repouso suave |
+
+`comparacao_tres_finais.wav` apresenta as versões nessa ordem, separadas por
+dois segundos de silêncio. O script `renderizar_finais.sh` regenera todos os
+MIDIs, WAVs e a faixa comparativa com a mesma SoundFont e o mesmo volume.
+
 ## Como reproduzir
 
 ```bash
