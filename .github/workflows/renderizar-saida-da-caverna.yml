@@ -1,0 +1,46 @@
+name: Renderizar três finais de Saída da Caverna
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  renderizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Instalar dependências
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fluidsynth fluid-soundfont-gm
+          python -m pip install -r requirements.txt pytest
+      - name: Testar e renderizar
+        run: |
+          python -m pytest -q tests
+          chmod +x saida_da_caverna/renderizar_finais.sh
+          ./saida_da_caverna/renderizar_finais.sh
+      - name: Validar áudio e duração
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import audioop
+          import wave
+          for path in Path('saida_da_caverna').glob('final_*.wav'):
+              with wave.open(str(path), 'rb') as audio:
+                  data = audio.readframes(audio.getnframes())
+                  assert audio.getnframes() / audio.getframerate() < 30
+                  assert audioop.rms(data, audio.getsampwidth()) > 0
+          PY
+      - name: Publicar arquivos renderizados
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f saida_da_caverna/final_*.mid saida_da_caverna/final_*.wav
+          git add saida_da_caverna/comparacao_tres_finais.wav
+          git commit -m "build: renderizar três finais de Saída da Caverna"
+          git push
