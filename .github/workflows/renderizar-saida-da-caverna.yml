@@ -2,6 +2,12 @@ name: Renderizar três finais de Saída da Caverna
 
 on:
   workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - "saida_da_caverna/finais.py"
+      - "saida_da_caverna/renderizar_finais.sh"
+      - ".github/workflows/renderizar-saida-da-caverna.yml"
 
 permissions:
   contents: write
