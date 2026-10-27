@@ -1,0 +1,23 @@
+{
+  "bpm": 88,
+  "compasso": "4/4",
+  "compassos": 54,
+  "duracao_audio_segundos": 153,
+  "versoes": [
+    {
+      "nome": "luminoso",
+      "sha256_midi": "cc0abe9a15f975797db5a1ed7ec5043f38680ff659ea9a44c8e25582b0563cf9",
+      "sha256_corpo_comum": "c12f24f3eec88681fda7f5028649c55326101fb4f32cf26dae3bc667693319c8"
+    },
+    {
+      "nome": "suspenso",
+      "sha256_midi": "256fc9c91d00e6e8ab56cf359b852f3c662043d5b56ca5e13950eaeb48dec600",
+      "sha256_corpo_comum": "c12f24f3eec88681fda7f5028649c55326101fb4f32cf26dae3bc667693319c8"
+    },
+    {
+      "nome": "sereno",
+      "sha256_midi": "0133dc59fc2e772edaf0b8bb348d3a0c11e3691ddcad388e6b7a6737268672dd",
+      "sha256_corpo_comum": "c12f24f3eec88681fda7f5028649c55326101fb4f32cf26dae3bc667693319c8"
+    }
+  ]
+}
