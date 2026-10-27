@@ -1,0 +1,38 @@
+name: Renderizar Saida da Caverna
+on:
+  push:
+    paths:
+      - 'saida_da_caverna/completa/compor.py'
+      - '.github/workflows/saida-da-caverna.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  renderizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalar instrumentos
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fluidsynth fluid-soundfont-gm ffmpeg
+      - name: Compor e renderizar tres finais
+        run: python3 saida_da_caverna/completa/compor.py --render
+      - name: Preservar arquivos para download
+        uses: actions/upload-artifact@v4
+        with:
+          name: Saida-da-Caverna-tres-finais
+          path: |
+            saida_da_caverna/completa/*.mp3
+            saida_da_caverna/completa/*.wav
+            saida_da_caverna/completa/*.mid
+            saida_da_caverna/completa/validacao.json
+      - name: Publicar audios e MIDIs no repositorio
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add saida_da_caverna/completa/
+          git diff --cached --quiet && exit 0
+          git commit -m "audio: publicar Saida da Caverna com tres encerramentos"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
