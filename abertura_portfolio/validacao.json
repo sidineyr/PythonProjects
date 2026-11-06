@@ -1,0 +1,15 @@
+{
+  "title": "Portal da Descoberta",
+  "duration_seconds": 14.0,
+  "sample_rate": 44100,
+  "channels": 2,
+  "bpm": 112,
+  "peak_dbfs": -3.38,
+  "rms_dbfs": -19.15,
+  "method": "MIDI original, FluidR3 GM, sirene e efeitos sintetizados sem amostras de terceiros",
+  "sha256": {
+    "portal_da_descoberta.wav": "77f25b7ce9618bdd39c7b9ae412c110b182512f1d3ba7c274e9e9a35ba199d3b",
+    "portal_da_descoberta.mp3": "faa63d4b0a08b40b2ca3a1a27eedee1f533b9dd43ec9191c532853ec37d2f031",
+    "portal_da_descoberta.mid": "c8e3b228bc2ed8e923620f3ed85d6dbdda74a967f6c77e891088dbe288a4aa7d"
+  }
+}
