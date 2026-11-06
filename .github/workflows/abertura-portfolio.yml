@@ -1,0 +1,29 @@
+name: Renderizar abertura do portfolio
+on:
+  push:
+    paths:
+      - 'abertura_portfolio/compor.py'
+      - '.github/workflows/abertura-portfolio.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  renderizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalar instrumentos e encoder
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fluidsynth fluid-soundfont-gm ffmpeg
+      - name: Compor, renderizar e validar
+        run: python3 abertura_portfolio/compor.py --render
+      - name: Publicar audios reproduziveis
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f abertura_portfolio/*.mp3 abertura_portfolio/*.wav abertura_portfolio/*.mid abertura_portfolio/validacao.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'audio: publicar Portal da Descoberta'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
